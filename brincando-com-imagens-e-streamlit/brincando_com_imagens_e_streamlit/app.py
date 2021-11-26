@@ -119,13 +119,13 @@ if uploaded_file is not None:
     #         image[:,:,2] = c * (np.log(image[:,:,2] + 1))
     #         image = Image.fromarray(image).convert('L')
 
-    # image_aux
-    # option = st.sidebar.selectbox(
-    #     'Qual o nível de cores?',
-    #     (2, 4, 8, 16, 32, 64, 128, 192, 256),
-    # )
+    image_aux
+    option = st.sidebar.selectbox(
+        'Qual o nível de cores?',
+        (2, 4, 8, 16, 32, 64, 128, 192, 256),
+    )
 
-    # image_aux = np.copy(image_gray_corr)
+    image_aux = np.copy(image_gray_corr)
     # if option == 2:
     #     image_aux[image_aux > 127] = 255
     #     image_aux[image_aux < 127] = 0
@@ -144,5 +144,19 @@ if uploaded_file is not None:
     #     image_aux[(image_aux > 31) & (image_aux < 64)] = 32
     #     image_aux[image_aux < 32] = 0
 
-    # st.image(image_aux)    
-    
+    st.write(f'Imagem com {option} cores')
+
+    def number_colors(_cor, img_aux):
+        color_value = (256 / _cor)
+        print(color_value)
+        print(f'color: {_cor}')
+        for i in range(_cor):
+            if i == 0:
+                img_aux[img_aux <= color_value] = 0
+            elif i == _cor - 1:
+                img_aux[img_aux >= (color_value * i)] = 255
+            else:
+                img_aux[(img_aux > ((i * color_value) - 1)) & (img_aux < ((i + 1) * color_value))] = color_value * i
+    number_colors(option, image_aux)
+
+    st.image(image_aux)
